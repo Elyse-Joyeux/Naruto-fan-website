@@ -9,12 +9,14 @@ import {
   Target,
   Video,
   Zap,
+  Users,
 } from "lucide-react";
 import { HeroCard } from "./components/HeroCard";
 import { MissionCard } from "./components/MissionCard";
 import { Navigation } from "./components/Navigation";
 import { VideoCard } from "./components/VideoCard";
 import { WarCard } from "./components/WarCard";
+import { CharacterSearch } from "./components/CharacterSearch";
 import {
   Dialog,
   DialogContent,
@@ -47,6 +49,16 @@ const quizQuestions = [
 ];
 
 export default function App() {
+  const [activeSection, setActiveSection] = useState<
+    | "home"
+    | "heroes"
+    | "wars"
+    | "missions"
+    | "videos"
+    | "jutsu"
+    | "clans"
+    | "search"
+  >("home");
   const [heroSearch, setHeroSearch] = useState("");
   const [selectedVillage, setSelectedVillage] = useState("All");
   const [selectedRank, setSelectedRank] = useState("All");
@@ -620,6 +632,10 @@ export default function App() {
             ))}
           </div>
         </div>
+      </section>
+
+      <section id="search" className="py-0 px-0 bg-black">
+        <CharacterSearch />
       </section>
 
       <section className="py-24 px-4 bg-gradient-to-b from-black to-slate-950">
