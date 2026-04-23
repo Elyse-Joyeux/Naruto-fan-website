@@ -1,3 +1,37 @@
 @import './fonts.css';
 @import './tailwind.css';
 @import './theme.css';
+
+.chakra-particle {
+  position: absolute;
+  bottom: -24px;
+  width: 8px;
+  height: 8px;
+  border-radius: 9999px;
+  background: radial-gradient(circle, rgba(251, 146, 60, 0.95), rgba(234, 88, 12, 0.2));
+  box-shadow: 0 0 18px rgba(249, 115, 22, 0.65);
+  animation: chakraFloat linear infinite;
+}
+
+@keyframes chakraFloat {
+  0% {
+    transform: translateY(0) scale(0.8);
+    opacity: 0;
+  }
+  10% {
+    opacity: 0.9;
+  }
+  80% {
+    opacity: 0.5;
+  }
+  100% {
+    transform: translateY(-110vh) scale(1.5);
+    opacity: 0;
+  }
+}
+
+.shippuden-theme {
+  --shippuden-red: #b91c1c;
+  --shippuden-amber: #f59e0b;
+  --shippuden-night: #0a0a12;
+}
