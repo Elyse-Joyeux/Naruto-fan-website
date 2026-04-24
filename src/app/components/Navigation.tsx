@@ -7,19 +7,24 @@ export function Navigation() {
   const navItems = [
     { name: "Home", href: "#home" },
     { name: "Heroes", href: "#heroes" },
+    { name: "Hokage", href: "#hokage" },
     { name: "Wars", href: "#wars" },
     { name: "Missions", href: "#missions" },
     { name: "Videos", href: "#videos" },
-    { name: "Facts", href: "#facts" }
+    { name: "Facts", href: "#facts" },
+    { name: "Search", href: "#search" },
   ];
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 border-b border-orange-500/30" style={{
-      backgroundImage: "url(/images/naruto-navbar-image.jpg)",
-      backgroundSize: "cover",
-      backgroundPosition: "center",
-      backgroundAttachment: "fixed"
-    }}>
+    <nav
+      className="fixed top-0 left-0 right-0 z-50 border-b border-orange-500/30"
+      style={{
+        backgroundImage: "url(/images/naruto-navbar-image.jpg)",
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        backgroundAttachment: "fixed",
+      }}
+    >
       <div className="absolute inset-0 bg-black/70 backdrop-blur-md" />
       <div className="max-w-7xl mx-auto px-4 relative z-10">
         <div className="flex items-center justify-between h-16">
@@ -72,7 +77,6 @@ export function Navigation() {
             ))}
           </div>
         )}
-      </div>
       </div>
     </nav>
   );

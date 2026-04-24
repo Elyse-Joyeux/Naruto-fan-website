@@ -3,6 +3,7 @@ import { Search, Filter, X } from "lucide-react";
 import { completeCharacterDatabase } from "../../data/narutoData";
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
+import { ImageWithFallback } from "./ImageWithFallback";
 import {
   Card,
   CardContent,
@@ -19,6 +20,8 @@ export function CharacterSearch() {
   const [selectedVillage, setSelectedVillage] = useState("All");
   const [showFilters, setShowFilters] = useState(false);
 
+  const query = searchQuery.trim().toLowerCase();
+
   const auraOptions = ["All", "Legendary", "Elite", "Notable"];
   const villageOptions = useMemo(() => {
     const villages = new Set(
@@ -30,16 +33,37 @@ export function CharacterSearch() {
   const filteredCharacters = useMemo(() => {
     return completeCharacterDatabase.filter((character) => {
       const matchesSearch =
-        character.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        character.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        character.description.toLowerCase().includes(searchQuery.toLowerCase());
+        query.length === 0
+          ? false
+          : character.name.toLowerCase().includes(query) ||
+            character.title.toLowerCase().includes(query) ||
+            character.description.toLowerCase().includes(query);
       const matchesAura =
         selectedAura === "All" || character.aura === selectedAura;
       const matchesVillage =
         selectedVillage === "All" || character.village === selectedVillage;
       return matchesSearch && matchesAura && matchesVillage;
     });
-  }, [searchQuery, selectedAura, selectedVillage]);
+  }, [query, selectedAura, selectedVillage]);
+
+  const characterImage = (name: string) => {
+    const key = name.toLowerCase();
+    if (key.includes("hashirama")) return "/images/hashirama1.png";
+    if (key.includes("tobirama")) return "/images/tobirama.jpg";
+    if (key.includes("hiruzen") || key.includes("sarutobi"))
+      return "/images/sarutobi.avif";
+    if (key.includes("tsunade")) return "/images/tsunade.jpg";
+    if (key.includes("minato")) return "/images/minato.jpg";
+    if (key.includes("kakashi")) return "/images/kakashi.jpg";
+    if (key.includes("naruto")) return "/images/naruto.webp";
+    if (key.includes("sasuke")) return "/images/sasuke-in-boruto.jpg";
+    if (key.includes("hinata")) return "/images/hinata-hyuga.avif";
+    if (key.includes("might guy") || key.includes("mighty guy"))
+      return "/images/mighty-guy.jpg";
+    if (key.includes("rock lee")) return "/images/rock-lee.webp";
+    if (key.includes("shikamaru")) return "/images/shikamaru-nara.jpg";
+    return undefined;
+  };
 
   const auraColors = {
     Legendary: "border-yellow-400 bg-yellow-50 dark:bg-yellow-900/20",
@@ -54,7 +78,7 @@ export function CharacterSearch() {
   };
 
   return (
-    <div className="w-full min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 p-6">
+    <div className="w-full bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 p-6">
       <div className="max-w-6xl mx-auto">
         {/* Header */}
         <div className="mb-8">
@@ -90,7 +114,7 @@ export function CharacterSearch() {
             {showFilters ? "Hide Filters" : "Show Filters"}
           </Button>
           <div className="text-gray-300 text-sm flex items-center">
-            {filteredCharacters.length} character
+            {query.length === 0 ? 0 : filteredCharacters.length} character
             {filteredCharacters.length !== 1 ? "s" : ""} found
           </div>
         </div>
@@ -165,7 +189,16 @@ export function CharacterSearch() {
 
         {/* Character Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {filteredCharacters.length > 0 ? (
+          {query.length === 0 ? (
+            <div className="col-span-full text-center py-12">
+              <p className="text-gray-300 text-lg">
+                Start typing to search the database (150+ characters).
+              </p>
+              <p className="text-gray-500 text-sm mt-2">
+                Example: “Hokage”, “Uchiha”, “Sage”, “Seven Swordsmen”.
+              </p>
+            </div>
+          ) : filteredCharacters.length > 0 ? (
             filteredCharacters.map((character) => (
               <Card
                 key={`${character.name}-${character.village}`}
@@ -174,6 +207,16 @@ export function CharacterSearch() {
                 }`}
               >
                 <CardHeader className="pb-3">
+                  {characterImage(character.name) && (
+                    <div className="mb-3 rounded-lg overflow-hidden border border-black/10 dark:border-white/10">
+                      <ImageWithFallback
+                        src={characterImage(character.name)}
+                        alt={character.name}
+                        className="w-full h-40 object-cover"
+                        loading="lazy"
+                      />
+                    </div>
+                  )}
                   <div className="flex items-start justify-between gap-2">
                     <div className="flex-1">
                       <CardTitle className="text-lg">

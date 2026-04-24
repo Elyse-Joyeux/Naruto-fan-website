@@ -12,6 +12,12 @@ interface HeroCardProps {
   abilities: string[];
   achievements: string[];
   signature: string;
+  powerStats?: {
+    speed: number;
+    iq: number;
+    chakra: number;
+    taijutsu: number;
+  };
   onSelect?: () => void;
   isFavorite?: boolean;
   onToggleFavorite?: () => void;
@@ -27,6 +33,7 @@ export function HeroCard({
   abilities,
   achievements,
   signature,
+  powerStats,
   onSelect,
   isFavorite = false,
   onToggleFavorite
@@ -147,6 +154,38 @@ export function HeroCard({
                 ))}
               </ul>
             </div>
+
+            {/* Power Stats */}
+            {powerStats && (
+              <div>
+                <h4 className="text-cyan-300 mb-3 flex items-center gap-2">
+                  📊 Power Stats
+                </h4>
+                <div className="space-y-3">
+                  {(
+                    [
+                      ["Speed", powerStats.speed],
+                      ["IQ", powerStats.iq],
+                      ["Chakra", powerStats.chakra],
+                      ["Taijutsu", powerStats.taijutsu],
+                    ] as const
+                  ).map(([label, value]) => (
+                    <div key={label}>
+                      <div className="flex items-center justify-between text-xs text-gray-300 mb-1">
+                        <span>{label}</span>
+                        <span className="text-cyan-200">{value}/10</span>
+                      </div>
+                      <div className="h-2 rounded-full bg-white/10 overflow-hidden">
+                        <div
+                          className="h-full bg-gradient-to-r from-cyan-400 to-blue-500"
+                          style={{ width: `${Math.min(10, Math.max(0, value)) * 10}%` }}
+                        />
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
         )}
       </div>

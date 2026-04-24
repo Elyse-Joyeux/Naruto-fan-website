@@ -9,7 +9,6 @@ import {
   Target,
   Video,
   Zap,
-  Users,
 } from "lucide-react";
 import { HeroCard } from "./components/HeroCard";
 import { MissionCard } from "./components/MissionCard";
@@ -28,6 +27,7 @@ import {
   clans,
   facts,
   heroes,
+  hiddenHeroes,
   jutsuEncyclopedia,
   missions,
   videos,
@@ -63,9 +63,6 @@ export default function App() {
   const [selectedVillage, setSelectedVillage] = useState("All");
   const [selectedRank, setSelectedRank] = useState("All");
   const [videoCategory, setVideoCategory] = useState("All");
-  const [sortStat, setSortStat] = useState<
-    "speed" | "iq" | "chakra" | "taijutsu"
-  >("chakra");
   const [favorites, setFavorites] = useState<string[]>([]);
   const [watchedVideos, setWatchedVideos] = useState<string[]>([]);
   const [activeHero, setActiveHero] = useState<(typeof heroes)[number] | null>(
@@ -107,20 +104,25 @@ export default function App() {
     },
   ];
 
-  const filteredHeroes = useMemo(
-    () =>
-      heroes.filter((hero) => {
-        const matchesSearch = hero.name
-          .toLowerCase()
-          .includes(heroSearch.toLowerCase());
-        const matchesVillage =
-          selectedVillage === "All" || hero.village === selectedVillage;
-        const matchesRank =
-          selectedRank === "All" || hero.rank === selectedRank;
-        return matchesSearch && matchesVillage && matchesRank;
-      }),
-    [heroSearch, selectedVillage, selectedRank],
-  );
+  const filteredHeroes = useMemo(() => {
+    const query = heroSearch.trim().toLowerCase();
+    const dataset = query.length > 0 ? [...heroes, ...hiddenHeroes] : heroes;
+
+    return dataset.filter((hero) => {
+      const matchesSearch =
+        query.length === 0 ||
+        hero.name.toLowerCase().includes(query) ||
+        hero.title.toLowerCase().includes(query) ||
+        hero.bio.toLowerCase().includes(query) ||
+        hero.clan.toLowerCase().includes(query) ||
+        hero.abilities.some((ability) => ability.toLowerCase().includes(query));
+      const matchesVillage =
+        selectedVillage === "All" || hero.village === selectedVillage;
+      const matchesRank =
+        selectedRank === "All" || hero.rank === selectedRank;
+      return matchesSearch && matchesVillage && matchesRank;
+    });
+  }, [heroSearch, selectedVillage, selectedRank]);
 
   const filteredVideos = useMemo(
     () =>
@@ -130,13 +132,15 @@ export default function App() {
     [videoCategory],
   );
 
-  const rankingBoard = useMemo(
-    () =>
-      [...heroes].sort(
-        (a, b) => b.powerStats[sortStat] - a.powerStats[sortStat],
-      ),
-    [sortStat],
-  );
+  const hokageHeroes = useMemo(() => {
+    const pool = [...heroes, ...hiddenHeroes];
+    return pool.filter(
+      (hero) =>
+        hero.rank === "Hokage" ||
+        hero.title.toLowerCase().includes("hokage") ||
+        hero.rank.toLowerCase().includes("hokage"),
+    );
+  }, []);
 
   const activeQuestion = quizQuestions[quizIndex % quizQuestions.length];
 
@@ -245,7 +249,7 @@ export default function App() {
             className="absolute inset-0 opacity-35"
             style={{
               backgroundImage:
-                "url(https://static.wikia.nocookie.net/naruto/images/e/e6/Konohagakure.png)",
+                "url(/images/naruto-navbar-image.jpg)",
               backgroundSize: "cover",
               backgroundPosition: "center",
               backgroundAttachment: "fixed",
@@ -286,6 +290,37 @@ export default function App() {
               event.currentTarget.style.display = "none";
             }}
           />
+        </div>
+      </section>
+
+      <section className="py-12 px-4 bg-gradient-to-b from-black via-red-950/10 to-black">
+        <div className="max-w-6xl mx-auto border border-red-500/30 rounded-2xl p-6 bg-black/60">
+          <h3 className="text-2xl text-red-300 mb-2 text-center">
+            Sharingan Evolution
+          </h3>
+          <p className="text-sm text-gray-300 mb-6 text-center">
+            Using the images you added for Sharingan and its evolution.
+          </p>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <img
+              src="/images/sharingan.jpg"
+              alt="Sharingan"
+              className="w-full h-64 object-cover rounded-xl border border-red-500/30"
+              loading="lazy"
+              onError={(event) => {
+                event.currentTarget.style.display = "none";
+              }}
+            />
+            <img
+              src="/images/sharingan-evolution.jpg"
+              alt="Sharingan evolution"
+              className="w-full h-64 object-cover rounded-xl border border-red-500/30"
+              loading="lazy"
+              onError={(event) => {
+                event.currentTarget.style.display = "none";
+              }}
+            />
+          </div>
         </div>
       </section>
 
@@ -339,6 +374,34 @@ export default function App() {
             {filteredHeroes.map((hero) => (
               <HeroCard
                 key={hero.name}
+                {...hero}
+                isFavorite={favorites.includes(hero.name)}
+                onToggleFavorite={() => toggleFavorite(hero.name)}
+                onSelect={() => setActiveHero(hero)}
+              />
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section
+        id="hokage"
+        className="py-24 px-4 bg-gradient-to-b from-black via-emerald-950/10 to-black"
+      >
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-16">
+            <h2 className="text-6xl bg-gradient-to-r from-emerald-400 to-yellow-500 bg-clip-text text-transparent">
+              Hokage Archives
+            </h2>
+            <p className="text-gray-300 mt-3 max-w-3xl mx-auto">
+              A dedicated page for Hokage only—each with picture, abilities,
+              accomplishments, and power.
+            </p>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {hokageHeroes.map((hero) => (
+              <HeroCard
+                key={`hokage-${hero.name}`}
                 {...hero}
                 isFavorite={favorites.includes(hero.name)}
                 onToggleFavorite={() => toggleFavorite(hero.name)}
@@ -461,43 +524,6 @@ export default function App() {
                 <div className="text-5xl mb-4">{fact.icon}</div>
                 <h3 className="text-2xl text-orange-400 mb-3">{fact.title}</h3>
                 <p className="text-gray-300">{fact.description}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section className="py-24 px-4 bg-gradient-to-b from-slate-950 to-black">
-        <div className="max-w-7xl mx-auto">
-          <h2 className="text-4xl text-orange-400 mb-6">Power Ranking Board</h2>
-          <div className="mb-6 max-w-xs">
-            <select
-              value={sortStat}
-              onChange={(event) =>
-                setSortStat(
-                  event.target.value as "speed" | "iq" | "chakra" | "taijutsu",
-                )
-              }
-              className="w-full bg-black border border-orange-500/30 rounded-md px-3 py-2"
-            >
-              <option value="speed">Speed</option>
-              <option value="iq">IQ</option>
-              <option value="chakra">Chakra</option>
-              <option value="taijutsu">Taijutsu</option>
-            </select>
-          </div>
-          <div className="grid gap-3">
-            {rankingBoard.map((hero, index) => (
-              <div
-                key={hero.name}
-                className="border border-orange-500/30 rounded-lg p-4 flex items-center justify-between bg-black/70 hover:border-orange-500 transition-colors"
-              >
-                <p>
-                  {index + 1}. {hero.name}
-                </p>
-                <p className="text-orange-300">
-                  {sortStat.toUpperCase()}: {hero.powerStats[sortStat]}/10
-                </p>
               </div>
             ))}
           </div>
