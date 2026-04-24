@@ -68,8 +68,6 @@ export default function App() {
   >("chakra");
   const [favorites, setFavorites] = useState<string[]>([]);
   const [watchedVideos, setWatchedVideos] = useState<string[]>([]);
-  const [compareA, setCompareA] = useState("");
-  const [compareB, setCompareB] = useState("");
   const [activeHero, setActiveHero] = useState<(typeof heroes)[number] | null>(
     null,
   );
@@ -138,12 +136,6 @@ export default function App() {
         (a, b) => b.powerStats[sortStat] - a.powerStats[sortStat],
       ),
     [sortStat],
-  );
-
-  const comparedHeroes = useMemo(
-    () =>
-      heroes.filter((hero) => hero.name === compareA || hero.name === compareB),
-    [compareA, compareB],
   );
 
   const activeQuestion = quizQuestions[quizIndex % quizQuestions.length];
@@ -571,62 +563,6 @@ export default function App() {
                 </p>
                 <p className="text-gray-500 text-sm mt-2">
                   First appearance: {jutsu.firstAppearance}
-                </p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section className="py-24 px-4 bg-gradient-to-b from-slate-950 to-black">
-        <div className="max-w-7xl mx-auto">
-          <h2 className="text-4xl text-green-400 mb-6">
-            Compare Two Characters
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-6">
-            <select
-              value={compareA}
-              onChange={(event) => setCompareA(event.target.value)}
-              className="bg-black border border-green-500/30 rounded-md px-3 py-2"
-            >
-              <option value="">Select first hero</option>
-              {heroes.map((hero) => (
-                <option key={hero.name} value={hero.name}>
-                  {hero.name}
-                </option>
-              ))}
-            </select>
-            <select
-              value={compareB}
-              onChange={(event) => setCompareB(event.target.value)}
-              className="bg-black border border-green-500/30 rounded-md px-3 py-2"
-            >
-              <option value="">Select second hero</option>
-              {heroes.map((hero) => (
-                <option key={hero.name} value={hero.name}>
-                  {hero.name}
-                </option>
-              ))}
-            </select>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-            {comparedHeroes.map((hero) => (
-              <div
-                key={hero.name}
-                className="border border-green-500/30 rounded-xl p-5 bg-black/70"
-              >
-                <h3 className="text-xl text-green-300 mb-2">{hero.name}</h3>
-                <p className="text-sm text-gray-300">
-                  Speed: {hero.powerStats.speed}
-                </p>
-                <p className="text-sm text-gray-300">
-                  IQ: {hero.powerStats.iq}
-                </p>
-                <p className="text-sm text-gray-300">
-                  Chakra: {hero.powerStats.chakra}
-                </p>
-                <p className="text-sm text-gray-300">
-                  Taijutsu: {hero.powerStats.taijutsu}
                 </p>
               </div>
             ))}
