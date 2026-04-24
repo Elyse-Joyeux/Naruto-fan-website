@@ -12,6 +12,8 @@ export function Navigation() {
     { name: "Missions", href: "#missions" },
     { name: "Videos", href: "#videos" },
     { name: "Facts", href: "#facts" },
+    { name: "Clans", href: "#powerful-clans" },
+    { name: "Finale", href: "#finale" },
     { name: "Search", href: "#search" },
   ];
 

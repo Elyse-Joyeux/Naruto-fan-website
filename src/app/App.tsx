@@ -16,6 +16,17 @@ import { Navigation } from "./components/Navigation";
 import { VideoCard } from "./components/VideoCard";
 import { WarCard } from "./components/WarCard";
 import { CharacterSearch } from "./components/CharacterSearch";
+import { InfoCard } from "./components/InfoCard";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "./components/ui/alert-dialog";
 import {
   Dialog,
   DialogContent,
@@ -80,6 +91,8 @@ export default function App() {
   const [soundEnabled, setSoundEnabled] = useState(false);
   const [activeTrack, setActiveTrack] = useState("naruto-theme");
   const audioRef = useRef<HTMLAudioElement | null>(null);
+  const [introOpen, setIntroOpen] = useState(true);
+  const [showRedirectScreen, setShowRedirectScreen] = useState(false);
 
   const villageOptions = [
     "All",
@@ -134,12 +147,30 @@ export default function App() {
 
   const hokageHeroes = useMemo(() => {
     const pool = [...heroes, ...hiddenHeroes];
-    return pool.filter(
-      (hero) =>
-        hero.rank === "Hokage" ||
-        hero.title.toLowerCase().includes("hokage") ||
-        hero.rank.toLowerCase().includes("hokage"),
-    );
+    const hokageOrder = [
+      "Hashirama Senju",
+      "Tobirama Senju",
+      "Hiruzen Sarutobi",
+      "Minato Namikaze",
+      "Tsunade",
+      "Kakashi Hatake",
+      "Naruto Uzumaki",
+    ];
+    const rankIndex = new Map(hokageOrder.map((name, idx) => [name, idx]));
+
+    return pool
+      .filter(
+        (hero) =>
+          hero.rank === "Hokage" ||
+          hero.title.toLowerCase().includes("hokage") ||
+          hero.rank.toLowerCase().includes("hokage"),
+      )
+      .sort((a, b) => {
+        const ai = rankIndex.get(a.name) ?? 999;
+        const bi = rankIndex.get(b.name) ?? 999;
+        if (ai !== bi) return ai - bi;
+        return a.name.localeCompare(b.name);
+      });
   }, []);
 
   const activeQuestion = quizQuestions[quizIndex % quizQuestions.length];
@@ -185,8 +216,77 @@ export default function App() {
     }
   }, [soundEnabled, activeTrack]);
 
+  if (showRedirectScreen) {
+    return (
+      <div className="min-h-screen bg-gradient-to-b from-black via-slate-950 to-black text-white flex items-center justify-center p-6">
+        <div className="max-w-xl w-full border border-orange-500/30 rounded-2xl bg-black/70 p-8 text-center">
+          <h1 className="text-3xl text-orange-300 mb-3">
+            Thanks for stopping by.
+          </h1>
+          <p className="text-gray-300">
+            You chose “Not interested in Naruto”.
+            <br />
+            Please redirect to another page from this creator.
+          </p>
+          <div className="mt-6 flex flex-col sm:flex-row gap-3 justify-center">
+            <a
+              href="/"
+              className="px-5 py-3 rounded-lg border border-slate-700 hover:bg-slate-800"
+            >
+              Go back
+            </a>
+            <a
+              href={import.meta.env.VITE_REDIRECT_URL || "#"}
+              target="_blank"
+              rel="noreferrer"
+              className="px-5 py-3 rounded-lg bg-orange-500 text-black hover:bg-orange-600"
+            >
+              Redirect me
+            </a>
+          </div>
+          <p className="text-xs text-gray-500 mt-4">
+            Set <code>VITE_REDIRECT_URL</code> in your environment to your other
+            site URL.
+          </p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-[#120909] via-[#0a0a12] to-black text-white relative overflow-hidden shippuden-theme">
+      <AlertDialog open={introOpen} onOpenChange={setIntroOpen}>
+        <AlertDialogContent className="bg-slate-950 text-white border-orange-500/30">
+          <AlertDialogHeader>
+            <AlertDialogTitle className="text-orange-300">
+              Before you enter…
+            </AlertDialogTitle>
+            <AlertDialogDescription className="text-gray-300">
+              Are you genuinely interested in the Naruto universe?
+              <br />
+              If so, this page is dedicated to you—crafted to celebrate the Will of Fire, the legendary wars, and the shinobi who shaped history.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel
+              className="border border-slate-700 text-white hover:bg-slate-800"
+              onClick={() => {
+                setIntroOpen(false);
+                setShowRedirectScreen(true);
+              }}
+            >
+              Not interested
+            </AlertDialogCancel>
+            <AlertDialogAction
+              className="bg-orange-500 text-black hover:bg-orange-600"
+              onClick={() => setIntroOpen(false)}
+            >
+              Yes — I’m a Naruto fan
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
       <audio
         ref={audioRef}
         loop
@@ -271,56 +371,6 @@ export default function App() {
             Walk through the Hidden Leaf, relive legendary battles, and hear
             Naruto OST while exploring.
           </p>
-        </div>
-      </section>
-
-      <section className="py-10 px-4">
-        <div className="max-w-4xl mx-auto border border-red-500/30 rounded-2xl p-5 bg-black/60 text-center">
-          <h3 className="text-xl text-red-300 mb-2">Sharingan Eyes Overlay</h3>
-          <p className="text-sm text-gray-300 mb-4">
-            Drop your original sharingan image into{" "}
-            <code>/public/images/sharingan-eyes.png</code>
-          </p>
-          <img
-            src="/images/sharingan-eyes.png"
-            alt="Sharingan eyes overlay placeholder"
-            className="mx-auto max-h-40 object-contain"
-            loading="lazy"
-            onError={(event) => {
-              event.currentTarget.style.display = "none";
-            }}
-          />
-        </div>
-      </section>
-
-      <section className="py-12 px-4 bg-gradient-to-b from-black via-red-950/10 to-black">
-        <div className="max-w-6xl mx-auto border border-red-500/30 rounded-2xl p-6 bg-black/60">
-          <h3 className="text-2xl text-red-300 mb-2 text-center">
-            Sharingan Evolution
-          </h3>
-          <p className="text-sm text-gray-300 mb-6 text-center">
-            Using the images you added for Sharingan and its evolution.
-          </p>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <img
-              src="/images/sharingan.jpg"
-              alt="Sharingan"
-              className="w-full h-64 object-cover rounded-xl border border-red-500/30"
-              loading="lazy"
-              onError={(event) => {
-                event.currentTarget.style.display = "none";
-              }}
-            />
-            <img
-              src="/images/sharingan-evolution.jpg"
-              alt="Sharingan evolution"
-              className="w-full h-64 object-cover rounded-xl border border-red-500/30"
-              loading="lazy"
-              onError={(event) => {
-                event.currentTarget.style.display = "none";
-              }}
-            />
-          </div>
         </div>
       </section>
 
@@ -516,16 +566,132 @@ export default function App() {
             </div>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {facts.map((fact) => (
-              <div
-                key={fact.title}
-                className="bg-gradient-to-br from-orange-950/30 via-black to-black p-8 rounded-2xl border-2 border-orange-500/30"
-              >
-                <div className="text-5xl mb-4">{fact.icon}</div>
-                <h3 className="text-2xl text-orange-400 mb-3">{fact.title}</h3>
-                <p className="text-gray-300">{fact.description}</p>
-              </div>
-            ))}
+            {/* Naruto Transformations */}
+            <InfoCard
+              title="Naruto Transformations"
+              className="cursor-pointer"
+              trigger={
+                <div className="bg-gradient-to-br from-orange-950/30 via-black to-black p-8 rounded-2xl border-2 border-orange-500/30 hover:border-orange-500 transition-colors">
+                  <div className="text-5xl mb-4">🍥</div>
+                  <h3 className="text-2xl text-orange-400 mb-3">
+                    Naruto Transformations
+                  </h3>
+                  <p className="text-gray-300">
+                    Hover (or tap on mobile) to see the full transformation
+                    path with visuals.
+                  </p>
+                </div>
+              }
+              content={
+                <div>
+                  <div className="grid grid-cols-2 gap-2 mb-3">
+                    <img
+                      src="/images/naruto.webp"
+                      alt="Naruto"
+                      className="w-full h-28 object-cover rounded-md border border-orange-500/20"
+                      loading="lazy"
+                    />
+                    <img
+                      src="/images/naruto-hokage.gif"
+                      alt="Naruto Hokage"
+                      className="w-full h-28 object-cover rounded-md border border-orange-500/20"
+                      loading="lazy"
+                    />
+                  </div>
+                  <p className="text-orange-300 font-semibold mb-2">
+                    Transformations (first → last)
+                  </p>
+                  <ul className="space-y-1 text-sm text-gray-300">
+                    <li>• Base Naruto (Academy/Genin)</li>
+                    <li>• One-Tail Cloak (early Kurama chakra)</li>
+                    <li>• Four-Tails Rampage (unstable power)</li>
+                    <li>• Sage Mode</li>
+                    <li>• Kurama Chakra Mode (KCM)</li>
+                    <li>• KCM 2 (cooperation with Kurama)</li>
+                    <li>• Six Paths Sage Mode</li>
+                  </ul>
+                </div>
+              }
+            />
+
+            {/* Sharingan Evolution */}
+            <InfoCard
+              title="Sharingan Evolution"
+              className="cursor-pointer"
+              trigger={
+                <div className="bg-gradient-to-br from-red-950/30 via-black to-black p-8 rounded-2xl border-2 border-red-500/30 hover:border-red-500 transition-colors">
+                  <div className="text-5xl mb-4">👁️</div>
+                  <h3 className="text-2xl text-red-300 mb-3">
+                    Sharingan Evolution
+                  </h3>
+                  <p className="text-gray-300">
+                    Hover (or tap on mobile) to view the visuals + full path.
+                  </p>
+                </div>
+              }
+              content={
+                <div>
+                  <div className="grid grid-cols-2 gap-2 mb-3">
+                    <img
+                      src="/images/sharingan.jpg"
+                      alt="Sharingan"
+                      className="w-full h-28 object-cover rounded-md border border-red-500/20"
+                      loading="lazy"
+                    />
+                    <img
+                      src="/images/sharingan-evolution.jpg"
+                      alt="Sharingan evolution"
+                      className="w-full h-28 object-cover rounded-md border border-red-500/20"
+                      loading="lazy"
+                    />
+                  </div>
+                  <p className="text-red-300 font-semibold mb-2">
+                    Stages (core idea)
+                  </p>
+                  <ul className="space-y-1 text-sm text-gray-300">
+                    <li>• Sharingan (perception, copying, genjutsu)</li>
+                    <li>• Mangekyō Sharingan (unique ocular abilities)</li>
+                    <li>• Eternal Mangekyō (stability + power)</li>
+                    <li>• Rinnegan (legend-tier evolution)</li>
+                  </ul>
+                </div>
+              }
+            />
+
+            {/* Chakra Natures */}
+            <InfoCard
+              title="Chakra Natures & Kekkei Genkai"
+              className="cursor-pointer"
+              trigger={
+                <div className="bg-gradient-to-br from-cyan-950/20 via-black to-black p-8 rounded-2xl border-2 border-cyan-500/30 hover:border-cyan-400 transition-colors">
+                  <div className="text-5xl mb-4">⚡</div>
+                  <h3 className="text-2xl text-cyan-300 mb-3">
+                    Chakra Natures & Kekkei Genkai
+                  </h3>
+                  <p className="text-gray-300">
+                    Hover (or tap on mobile) for basics + combined releases.
+                  </p>
+                </div>
+              }
+              content={
+                <div>
+                  <p className="text-cyan-300 font-semibold mb-2">
+                    Five basics
+                  </p>
+                  <p className="text-sm text-gray-300">
+                    Fire • Wind • Lightning • Earth • Water
+                  </p>
+                  <p className="text-cyan-200 font-semibold mt-3 mb-2">
+                    Examples of combined releases
+                  </p>
+                  <ul className="space-y-1 text-sm text-gray-300">
+                    <li>• Wood (Hashirama)</li>
+                    <li>• Ice (Haku)</li>
+                    <li>• Lava / Boil / Scorch (various)</li>
+                  </ul>
+                </div>
+              }
+            />
           </div>
         </div>
       </section>
@@ -534,16 +700,67 @@ export default function App() {
         <div className="max-w-7xl mx-auto">
           <h2 className="text-4xl text-yellow-400 mb-8">Arc Timeline</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            {arcTimeline.map((item) => (
-              <div
-                key={item.arc}
-                className="border border-yellow-500/30 rounded-xl p-5 bg-black/70"
-              >
-                <h3 className="text-xl text-yellow-300 mb-1">{item.arc}</h3>
-                <p className="text-gray-400 text-sm mb-3">{item.period}</p>
-                <p className="text-gray-300">{item.highlight}</p>
-              </div>
-            ))}
+            {arcTimeline.map((item) => {
+              const arcImage =
+                item.arc === "Part 1"
+                  ? "/images/team-7-reunite.jpg"
+                  : item.arc === "Shippuden"
+                    ? "/images/sasuke-in-boruto.jpg"
+                    : "/images/naruto-madara-ninja-war.jpg";
+
+              return (
+                <InfoCard
+                  key={item.arc}
+                  title={`${item.arc} — Expanded Details`}
+                  className="cursor-pointer"
+                  trigger={
+                    <div className="border border-yellow-500/30 rounded-xl p-5 bg-black/70 hover:border-yellow-400 transition-colors">
+                      <h3 className="text-xl text-yellow-300 mb-1">
+                        {item.arc}
+                      </h3>
+                      <p className="text-gray-400 text-sm mb-3">{item.period}</p>
+                      <p className="text-gray-300">{item.highlight}</p>
+                    </div>
+                  }
+                  content={
+                    <div>
+                      <img
+                        src={arcImage}
+                        alt={`${item.arc} key visual`}
+                        className="w-full h-44 object-cover rounded-lg border border-yellow-500/20 mb-3"
+                        loading="lazy"
+                      />
+                      <ul className="space-y-1 text-sm text-gray-300">
+                        {item.arc === "Part 1" && (
+                          <>
+                            <li>• Land of Waves: first true shinobi mission</li>
+                            <li>• Chūnin Exams: rivalries and growth</li>
+                            <li>• Konoha Crush: the cost of war</li>
+                            <li>• Valley of the End: Naruto vs Sasuke (Part 1)</li>
+                          </>
+                        )}
+                        {item.arc === "Shippuden" && (
+                          <>
+                            <li>• Akatsuki pursuit and tailed beasts</li>
+                            <li>• Pain’s assault and Naruto’s return</li>
+                            <li>• Five Kage Summit & shifting alliances</li>
+                            <li>• The road into the war</li>
+                          </>
+                        )}
+                        {item.arc === "War Arc" && (
+                          <>
+                            <li>• Allied Shinobi Forces unify</li>
+                            <li>• Ten-Tails and revived legends</li>
+                            <li>• Kaguya sealed by Team 7</li>
+                            <li>• Final Valley: Naruto vs Sasuke (final)</li>
+                          </>
+                        )}
+                      </ul>
+                    </div>
+                  }
+                />
+              );
+            })}
           </div>
         </div>
       </section>
@@ -553,20 +770,277 @@ export default function App() {
           <h2 className="text-4xl text-red-400 mb-8">Clan Pages</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
             {clans.map((clan) => (
+              <InfoCard
+                key={clan.name}
+                title={`${clan.name} — Major People & Abilities`}
+                className="cursor-pointer"
+                trigger={
+                  <div className="border border-red-500/30 rounded-xl p-6 bg-black/70 hover:border-red-400 transition-colors">
+                    <h3 className="text-2xl text-red-300 mb-2">{clan.name}</h3>
+                    <p className="text-gray-400 mb-2">
+                      Kekkei Genkai: {clan.kekkeiGenkai}
+                    </p>
+                    <p className="text-gray-400 mb-3">
+                      Specialty: {clan.specialty}
+                    </p>
+                    <p className="text-white text-sm">
+                      {clan.members.join(" • ")}
+                    </p>
+                  </div>
+                }
+                content={
+                  <div>
+                    <p className="text-red-300 font-semibold mb-2">
+                      {clan.name} — Major People & Abilities
+                    </p>
+                    {clan.name === "Uchiha" ? (
+                      <>
+                        <img
+                          src="/images/mighty-guy_vs_madara.webp"
+                          alt="Uchiha"
+                          className="w-full h-40 object-cover rounded-lg border border-red-500/20 mb-3"
+                          loading="lazy"
+                        />
+                        <p className="text-sm text-gray-300">
+                          Known for the Sharingan and elite fire-style ninjutsu,
+                          plus some of the strongest genjutsu users in history.
+                        </p>
+                        <ul className="mt-2 space-y-1 text-sm text-gray-300">
+                          <li>
+                            • Major: Madara • Itachi • Sasuke • Obito • Shisui
+                          </li>
+                          <li>
+                            • Abilities: Sharingan • Mangekyō • Susanoo •
+                            Amaterasu
+                          </li>
+                        </ul>
+                      </>
+                    ) : clan.name === "Senju" ? (
+                      <>
+                        <img
+                          src="/images/hashiramam.webp"
+                          alt="Senju"
+                          className="w-full h-40 object-cover rounded-lg border border-red-500/20 mb-3"
+                          loading="lazy"
+                        />
+                        <p className="text-sm text-gray-300">
+                          The clan of exceptional life-force and
+                          versatility—key founders of Konoha.
+                        </p>
+                        <ul className="mt-2 space-y-1 text-sm text-gray-300">
+                          <li>• Major: Hashirama • Tobirama • Tsunade</li>
+                          <li>
+                            • Abilities: Wood Release (rare) • Water mastery •
+                            Sealing
+                          </li>
+                        </ul>
+                      </>
+                    ) : clan.name === "Uzumaki" ? (
+                      <>
+                        <img
+                          src="/images/seventh-hokage.webp"
+                          alt="Uzumaki"
+                          className="w-full h-40 object-cover rounded-lg border border-red-500/20 mb-3"
+                          loading="lazy"
+                        />
+                        <p className="text-sm text-gray-300">
+                          Famous for massive chakra reserves and sealing
+                          techniques—survivors with stubborn power.
+                        </p>
+                        <ul className="mt-2 space-y-1 text-sm text-gray-300">
+                          <li>• Major: Naruto • Kushina • Nagato • Karin</li>
+                          <li>
+                            • Abilities: Sealing jutsu • Life-force • Chakra
+                            chains
+                          </li>
+                        </ul>
+                      </>
+                    ) : clan.name === "Hyuga" ? (
+                      <>
+                        <img
+                          src="/images/hinata-hyuga.avif"
+                          alt="Hyuga"
+                          className="w-full h-40 object-cover rounded-lg border border-red-500/20 mb-3"
+                          loading="lazy"
+                        />
+                        <p className="text-sm text-gray-300">
+                          Masters of the Byakugan and Gentle
+                          Fist—precision chakra control in close combat.
+                        </p>
+                        <ul className="mt-2 space-y-1 text-sm text-gray-300">
+                          <li>• Major: Hinata • Neji • Hiashi • Hanabi</li>
+                          <li>
+                            • Abilities: Byakugan • 64 Palms • Protective
+                            rotations
+                          </li>
+                        </ul>
+                      </>
+                    ) : (
+                      <p className="text-sm text-gray-300">
+                        Details are coming for this clan.
+                      </p>
+                    )}
+                  </div>
+                }
+              />
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section
+        id="powerful-clans"
+        className="py-24 px-4 bg-gradient-to-b from-black via-purple-950/10 to-black"
+      >
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-16">
+            <h2 className="text-6xl bg-gradient-to-r from-purple-400 to-red-400 bg-clip-text text-transparent">
+              Most Powerful Clans
+            </h2>
+            <p className="text-gray-300 mt-3 max-w-3xl mx-auto">
+              A focused spotlight on the clans that shaped the shinobi world
+              through bloodline gifts, sealing arts, and legendary leaders.
+            </p>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            {[
+              {
+                name: "Uchiha",
+                image: "/images/mighty-guy_vs_madara.webp",
+                highlights: [
+                  "Sharingan → Mangekyō",
+                  "Susanoo",
+                  "Genjutsu dominance",
+                ],
+                description:
+                  "The clan that defined ocular power. From elite genjutsu to Susanoo, their legacy reshaped every era—often through tragedy.",
+              },
+              {
+                name: "Senju",
+                image: "/images/hashiramam.webp",
+                highlights: [
+                  "Life-force & versatility",
+                  "Founders of Konoha",
+                  "Wood Release (rare)",
+                ],
+                description:
+                  "A clan of stamina and adaptability—leaders and founders whose strength wasn’t one trick, but a complete shinobi toolkit.",
+              },
+              {
+                name: "Uzumaki",
+                image: "/images/seventh-hokage.webp",
+                highlights: [
+                  "Sealing jutsu mastery",
+                  "Huge chakra reserves",
+                  "Longevity",
+                ],
+                description:
+                  "Feared for sealing techniques and monstrous chakra. Their heritage survives through resilience and bonds that outlast war.",
+              },
+              {
+                name: "Hyuga",
+                image: "/images/hinata-hyuga.avif",
+                highlights: ["Byakugan", "Gentle Fist", "Chakra point precision"],
+                description:
+                  "Masters of precision. Their Byakugan and Gentle Fist style turns chakra control into a surgical weapon in close combat.",
+              },
+            ].map((clan) => (
               <div
                 key={clan.name}
-                className="border border-red-500/30 rounded-xl p-6 bg-black/70"
+                className="border border-purple-500/30 rounded-2xl overflow-hidden bg-black/70"
               >
-                <h3 className="text-2xl text-red-300 mb-2">{clan.name}</h3>
-                <p className="text-gray-400 mb-2">
-                  Kekkei Genkai: {clan.kekkeiGenkai}
-                </p>
-                <p className="text-gray-400 mb-3">
-                  Specialty: {clan.specialty}
-                </p>
-                <p className="text-white text-sm">{clan.members.join(" • ")}</p>
+                <div className="h-56 overflow-hidden">
+                  <img
+                    src={clan.image}
+                    alt={clan.name}
+                    className="w-full h-full object-cover opacity-80"
+                    loading="lazy"
+                  />
+                </div>
+                <div className="p-5">
+                  <h3 className="text-2xl text-purple-200 mb-2">{clan.name}</h3>
+                  <p className="text-sm text-gray-300 mb-3">
+                    {clan.description}
+                  </p>
+                  <ul className="text-sm text-gray-300 space-y-1">
+                    {clan.highlights.map((h) => (
+                      <li key={h}>• {h}</li>
+                    ))}
+                  </ul>
+                </div>
               </div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      <section
+        id="finale"
+        className="py-24 px-4 bg-gradient-to-b from-black via-red-950/10 to-black"
+      >
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-16">
+            <h2 className="text-6xl bg-gradient-to-r from-red-400 to-orange-400 bg-clip-text text-transparent">
+              The Final Battles
+            </h2>
+            <p className="text-gray-300 mt-3 max-w-3xl mx-auto">
+              The war’s climax: Kaguya’s dimension-shattering fight… followed by
+              the final Naruto vs Sasuke battle that decided the future.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <div className="border border-red-500/30 rounded-2xl overflow-hidden bg-black/70">
+              <div className="h-56 overflow-hidden">
+                <img
+                  src="/images/naruto-madara-ninja-war.jpg"
+                  alt="Kaguya battle aftermath"
+                  className="w-full h-full object-cover opacity-80"
+                  loading="lazy"
+                />
+              </div>
+              <div className="p-6">
+                <h3 className="text-2xl text-red-300 mb-2">
+                  Battle Against Kaguya Ōtsutsuki
+                </h3>
+                <p className="text-gray-300">
+                  Team 7 faces Kaguya across shifting dimensions. Victory
+                  requires coordination, sealing, and the combined peak power of
+                  Naruto and Sasuke.
+                </p>
+                <ul className="mt-4 text-sm text-gray-300 space-y-1">
+                  <li>• Threat: dimension control + overwhelming chakra</li>
+                  <li>• Strategy: teamwork, timing, sealing condition</li>
+                  <li>• Outcome: Kaguya sealed</li>
+                </ul>
+              </div>
+            </div>
+
+            <div className="border border-orange-500/30 rounded-2xl overflow-hidden bg-black/70">
+              <div className="h-56 overflow-hidden">
+                <img
+                  src="/images/team-7-reunite.jpg"
+                  alt="Naruto vs Sasuke finale after victory"
+                  className="w-full h-full object-cover opacity-80"
+                  loading="lazy"
+                />
+              </div>
+              <div className="p-6">
+                <h3 className="text-2xl text-orange-300 mb-2">
+                  Naruto vs Sasuke — Final Valley (Final)
+                </h3>
+                <p className="text-gray-300">
+                  After Kaguya is sealed, Naruto and Sasuke clash one last time.
+                  It’s not just power—it’s ideology, pain, and what “peace”
+                  truly means.
+                </p>
+                <ul className="mt-4 text-sm text-gray-300 space-y-1">
+                  <li>• Theme: bonds vs control</li>
+                  <li>• Peak forms: Six Paths abilities</li>
+                  <li>• Result: reconciliation and a new era</li>
+                </ul>
+              </div>
+            </div>
           </div>
         </div>
       </section>
