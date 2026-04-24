@@ -27,7 +27,7 @@ export interface War {
   keyEvents: string[];
   casualties: string;
   outcome: string;
-  image: string;
+  image: string | string[];
   timeline: string[];
 }
 
@@ -97,7 +97,7 @@ export const heroes: Hero[] = [
     village: "Konohagakure",
     rank: "Rogue Ninja",
     clan: "Uchiha",
-    image: "https://static.wikia.nocookie.net/naruto/images/5/58/Sasuke_Part_2.png",
+    image: "/images/sasuke-in-boruto.jpg",
     bio: "After his clan's massacre, Sasuke pursued revenge before finding redemption as Konoha's protector from the shadows.",
     abilities: ["Rinnegan", "Amaterasu", "Perfect Susanoo", "Chidori"],
     achievements: ["Defeated Danzō", "Fought Kaguya", "Protects the village from the shadows"],
@@ -205,6 +205,123 @@ export const heroes: Hero[] = [
   }
 ];
 
+// Characters that should NOT appear on the default Heroes grid,
+// but can be surfaced via the Heroes-section search.
+export const hiddenHeroes: Hero[] = [
+  {
+    name: "Hashirama Senju",
+    title: "God of Shinobi • First Hokage",
+    village: "Konohagakure",
+    rank: "Hokage",
+    clan: "Senju",
+    image: "/images/hashirama1.png",
+    bio: "The co-founder of Konoha and its First Hokage. Hashirama’s rare Wood Release and huge life-force let him subdue tailed beasts and battle Madara to carve out an era of peace.",
+    abilities: ["Wood Release", "Sage Mode", "Regenerative Life-Force", "Tailed Beast Suppression"],
+    achievements: ["Co-founded Konohagakure", "Defeated Madara at the Valley of the End", "Unified clans under the Will of Fire"],
+    signature: "Wood Dragon Jutsu",
+    relationships: ["Madara (rival)", "Tobirama (brother)", "Mito (wife)"],
+    quote: "To protect the village... that's what a Hokage is.",
+    arc: "Shippuden",
+    powerStats: { speed: 8, iq: 9, chakra: 10, taijutsu: 9 }
+  },
+  {
+    name: "Tobirama Senju",
+    title: "Founder of Konoha Systems • Second Hokage",
+    village: "Konohagakure",
+    rank: "Hokage",
+    clan: "Senju",
+    image: "/images/tobirama.jpg",
+    bio: "The Second Hokage who professionalized the Hidden Leaf. A genius innovator, Tobirama created many foundational jutsu and institutions that shaped Konoha for generations.",
+    abilities: ["Flying Thunder God (creator)", "Shadow Clone Jutsu (creator)", "Water Release Mastery", "Edo Tensei (creator)"],
+    achievements: ["Established the Academy and ANBU foundations", "Developed key jutsu used across eras", "Protected his squad with his final stand"],
+    signature: "Water Release: Water Dragon Bullet",
+    relationships: ["Hashirama (brother)", "Hiruzen (student)", "Madara (enemy)"],
+    quote: "A village is built on systems, not miracles.",
+    arc: "Shippuden",
+    powerStats: { speed: 8, iq: 10, chakra: 9, taijutsu: 8 }
+  },
+  {
+    name: "Hiruzen Sarutobi",
+    title: "The Professor • Third Hokage",
+    village: "Konohagakure",
+    rank: "Hokage",
+    clan: "Sarutobi",
+    image: "/images/sarutobi.avif",
+    bio: "The Third Hokage, famed for mastering an immense range of techniques. Hiruzen led Konoha through turbulent decades and ultimately gave his life to stop Orochimaru.",
+    abilities: ["Master of the Five Natures", "Enma Summoning", "Sealing Techniques", "Shuriken Shadow Clone Jutsu"],
+    achievements: ["Led Konoha through multiple wars", "Trained legendary shinobi", "Sacrificed himself to stop Orochimaru’s assault"],
+    signature: "Reaper Death Seal",
+    relationships: ["Asuma (son)", "Orochimaru (student)", "Tobirama (teacher)"],
+    quote: "The Will of Fire will never be extinguished.",
+    arc: "Part 1",
+    powerStats: { speed: 7, iq: 9, chakra: 8, taijutsu: 8 }
+  },
+  {
+    name: "Tsunade",
+    title: "Legendary Sannin • Fifth Hokage",
+    village: "Konohagakure",
+    rank: "Hokage",
+    clan: "Senju",
+    image: "/images/tsunade.jpg",
+    bio: "One of the Legendary Sannin and the Fifth Hokage. Tsunade revolutionized medical ninjutsu in Konoha and combines unmatched healing with devastating strength.",
+    abilities: ["Creation Rebirth", "Byakugō Seal", "Medical Ninjutsu", "Monster Strength"],
+    achievements: ["Revived Konoha’s medical system", "Led the village through Pain’s aftermath", "Healed thousands during the war effort"],
+    signature: "Creation Rebirth",
+    relationships: ["Jiraiya (teammate)", "Orochimaru (teammate)", "Shizune (assistant)"],
+    quote: "A Hokage protects the village with everything they have.",
+    arc: "Shippuden",
+    powerStats: { speed: 7, iq: 8, chakra: 9, taijutsu: 9 }
+  },
+  {
+    name: "Shikamaru Nara",
+    title: "Genius Strategist • Konoha’s Right Hand",
+    village: "Konohagakure",
+    rank: "Jonin",
+    clan: "Nara",
+    image: "/images/shikamaru-nara.jpg",
+    bio: "A once-lazy prodigy who became the Leaf’s most trusted tactician. Shikamaru wins battles with calm logic, shadow techniques, and ruthless planning when it matters.",
+    abilities: ["Shadow Possession Jutsu", "Shadow Strangle Jutsu", "Battlefield Strategy", "Trap & Feint Mastery"],
+    achievements: ["Led multiple successful operations", "Helped defeat Hidan’s immortality tactics", "Served as Hokage advisor"],
+    signature: "Shadow Possession Jutsu",
+    relationships: ["Choji (best friend)", "Asuma (mentor)", "Temari (wife)"],
+    quote: "What a drag... but I’ll do what needs to be done.",
+    arc: "Shippuden",
+    powerStats: { speed: 6, iq: 10, chakra: 7, taijutsu: 6 }
+  },
+  {
+    name: "Rock Lee",
+    title: "The Green Beast • Taijutsu Specialist",
+    village: "Konohagakure",
+    rank: "Jonin",
+    clan: "N/A",
+    image: "/images/rock-lee.webp",
+    bio: "Unable to use ninjutsu or genjutsu, Lee forged himself into a taijutsu legend through pure effort. His spirit and discipline turn limitations into unstoppable momentum.",
+    abilities: ["Eight Gates", "Drunken Fist", "Front Lotus", "Leaf Hurricane"],
+    achievements: ["Defeated seemingly impossible opponents", "Proved hard work can surpass talent", "Inspired allies with unbreakable resolve"],
+    signature: "Front Lotus",
+    relationships: ["Might Guy (mentor)", "Neji (teammate)", "Tenten (teammate)"],
+    quote: "A dropout will beat a genius through hard work!",
+    arc: "Part 1",
+    powerStats: { speed: 8, iq: 7, chakra: 7, taijutsu: 10 }
+  },
+  {
+    name: "Gaara",
+    title: "Fifth Kazekage • Former Jinchūriki",
+    village: "Sunagakure",
+    rank: "Kazekage",
+    clan: "N/A",
+    image: "/images/ninja-alliance.jpg",
+    bio: "Once consumed by loneliness and violence, Gaara found purpose through Naruto’s example. As Kazekage, he protects his village and allies with absolute resolve—sand as both shield and spear.",
+    abilities: ["Sand Manipulation", "Absolute Defense", "Sand Burial", "Sealing Techniques"],
+    achievements: ["Became Fifth Kazekage", "Helped unite the Allied Shinobi Forces", "Protected comrades in the Fourth War"],
+    signature: "Sand Coffin",
+    relationships: ["Temari (sister)", "Kankuro (brother)", "Naruto (friend)"],
+    quote: "I fight to protect those I value.",
+    arc: "Shippuden",
+    powerStats: { speed: 7, iq: 8, chakra: 9, taijutsu: 7 }
+  }
+];
+
 export const wars: War[] = [
   {
     name: "Fourth Shinobi World War",
@@ -213,7 +330,7 @@ export const wars: War[] = [
     keyEvents: ["Allied Forces formed", "Ten-Tails revived", "Madara's revival", "Kaguya sealed"],
     casualties: "40,000+ shinobi",
     outcome: "Allied Victory",
-    image: "https://static.wikia.nocookie.net/naruto/images/0/07/Fourth_Shinobi_World_War.png",
+    image: "/images/naruto-madara-ninja-war.jpg",
     timeline: ["Alliance formed", "Ten-Tails battle", "Six Paths awakening", "Final Valley duel"]
   },
   {
@@ -223,7 +340,12 @@ export const wars: War[] = [
     keyEvents: ["Kannabi Bridge", "Obito presumed dead", "Yellow Flash rises"],
     casualties: "Thousands",
     outcome: "Ceasefire",
-    image: "https://static.wikia.nocookie.net/naruto/images/b/b4/Third_Shinobi_World_War.png",
+    image: [
+      "/images/minato.jpg",
+      "/images/kakashi.jpg",
+      "/images/ninja-alliance.jpg",
+      "/images/team-7-reunite.jpg",
+    ],
     timeline: ["Village tensions rise", "Frontline escalation", "Kannabi Bridge", "War exhaustion ceasefire"]
   }
 ];
