@@ -5,7 +5,7 @@ interface WarCardProps {
   keyEvents: string[];
   casualties: string;
   outcome: string;
-  image: string;
+  image: string | string[];
   onSelect?: () => void;
 }
 
@@ -19,19 +19,44 @@ export function WarCard({
   image,
   onSelect
 }: WarCardProps) {
+  const renderWarMedia = () => {
+    if (Array.isArray(image)) {
+      return (
+        <div className="w-full h-full grid grid-cols-2 grid-rows-2 gap-0.5 opacity-80">
+          {image.slice(0, 4).map((src, idx) => (
+            <img
+              key={`${src}-${idx}`}
+              src={src}
+              alt={`${name} collage ${idx + 1}`}
+              className="w-full h-full object-cover"
+              loading="lazy"
+              onError={(event) => {
+                event.currentTarget.style.display = "none";
+              }}
+            />
+          ))}
+        </div>
+      );
+    }
+
+    return (
+      <img
+        src={image}
+        alt={name}
+        className="w-full h-full object-cover opacity-70"
+        loading="lazy"
+        onError={(event) => {
+          event.currentTarget.src =
+            "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1200' height='800'%3E%3Crect width='100%25' height='100%25' fill='%230b0b0b'/%3E%3Ctext x='50%25' y='50%25' fill='%23ef4444' font-size='32' text-anchor='middle'%3EWar image unavailable%3C/text%3E%3C/svg%3E";
+        }}
+      />
+    );
+  };
+
   return (
     <div className="bg-gradient-to-br from-red-950/50 via-black to-black rounded-2xl overflow-hidden border-2 border-red-500/30 hover:border-red-500 transition-all duration-500 shadow-2xl">
       <div className="relative h-64 overflow-hidden">
-        <img
-          src={image}
-          alt={name}
-          className="w-full h-full object-cover opacity-70"
-          loading="lazy"
-          onError={(event) => {
-            event.currentTarget.src =
-              "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1200' height='800'%3E%3Crect width='100%25' height='100%25' fill='%230b0b0b'/%3E%3Ctext x='50%25' y='50%25' fill='%23ef4444' font-size='32' text-anchor='middle'%3EWar image unavailable%3C/text%3E%3C/svg%3E";
-          }}
-        />
+        {renderWarMedia()}
         <div className="absolute inset-0 bg-gradient-to-t from-black via-black/80 to-transparent" />
 
         <div className="absolute bottom-0 left-0 right-0 p-6">
