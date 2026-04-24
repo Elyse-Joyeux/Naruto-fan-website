@@ -1,5 +1,6 @@
 guidelines
 node_modules
+dist/images
 .env
 .env.local
 .env.development.local
