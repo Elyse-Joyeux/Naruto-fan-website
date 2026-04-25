@@ -993,7 +993,7 @@ export default function App() {
             <div className="border border-red-500/30 rounded-2xl overflow-hidden bg-black/70">
               <div className="h-56 overflow-hidden">
                 <img
-                  src="/images/naruto-madara-ninja-war.jpg"
+                  src="/images/kaguya-battle.webp"
                   alt="Kaguya battle aftermath"
                   className="w-full h-full object-cover opacity-80"
                   loading="lazy"
@@ -1019,7 +1019,7 @@ export default function App() {
             <div className="border border-orange-500/30 rounded-2xl overflow-hidden bg-black/70">
               <div className="h-56 overflow-hidden">
                 <img
-                  src="/images/team-7-reunite.jpg"
+                  src="/images/valley-of-the-end.webp"
                   alt="Naruto vs Sasuke finale after victory"
                   className="w-full h-full object-cover opacity-80"
                   loading="lazy"
