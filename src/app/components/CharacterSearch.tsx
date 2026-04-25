@@ -33,13 +33,11 @@ export function CharacterSearch() {
   const filteredCharacters = useMemo(() => {
     if (query.length === 0) return [];
 
-    const exactMatches = completeCharacterDatabase.filter(
-      (character) => character.name.toLowerCase() === query,
-    );
-    if (exactMatches.length > 0) return exactMatches;
-
     return completeCharacterDatabase.filter((character) => {
-      const matchesSearch = character.name.toLowerCase().includes(query);
+      const matchesSearch =
+        character.name.toLowerCase().includes(query) ||
+        character.title.toLowerCase().includes(query) ||
+        character.description.toLowerCase().includes(query);
       const matchesAura =
         selectedAura === "All" || character.aura === selectedAura;
       const matchesVillage =
