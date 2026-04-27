@@ -7,7 +7,14 @@ interface VideoCardProps {
   onToggleWatched?: () => void;
 }
 
-export function VideoCard({ title, description, videoId, category, watched = false, onToggleWatched }: VideoCardProps) {
+export function VideoCard({
+  title,
+  description,
+  videoId,
+  category,
+  watched = false,
+  onToggleWatched,
+}: VideoCardProps) {
   return (
     <div className="bg-gradient-to-br from-black to-slate-900 rounded-xl overflow-hidden border-2 border-orange-500/30 hover:border-orange-500 transition-all duration-300 shadow-xl">
       <div className="aspect-video">
