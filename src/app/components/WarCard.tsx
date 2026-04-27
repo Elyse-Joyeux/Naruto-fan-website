@@ -17,7 +17,7 @@ export function WarCard({
   casualties,
   outcome,
   image,
-  onSelect
+  onSelect,
 }: WarCardProps) {
   const renderWarMedia = () => {
     if (Array.isArray(image)) {
@@ -73,7 +73,10 @@ export function WarCard({
             <h4 className="text-red-400 mb-2">⚔️ Key Events</h4>
             <ul className="space-y-1">
               {keyEvents.map((event, idx) => (
-                <li key={idx} className="text-gray-400 text-sm flex items-start gap-2">
+                <li
+                  key={idx}
+                  className="text-gray-400 text-sm flex items-start gap-2"
+                >
                   <span className="text-red-500">•</span>
                   {event}
                 </li>
