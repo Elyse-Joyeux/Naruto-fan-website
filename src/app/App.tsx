@@ -796,7 +796,7 @@ export default function App() {
                     {clan.name === "Uchiha" ? (
                       <>
                         <img
-                          src="/images/mighty-guy_vs_madara.webp"
+                          src="/images/uchiha.webp"
                           alt="Uchiha"
                           className="w-full h-40 object-cover rounded-lg border border-red-500/20 mb-3"
                           loading="lazy"
@@ -818,7 +818,7 @@ export default function App() {
                     ) : clan.name === "Senju" ? (
                       <>
                         <img
-                          src="/images/hashiramam.webp"
+                          src="/images/senju.webp"
                           alt="Senju"
                           className="w-full h-40 object-cover rounded-lg border border-red-500/20 mb-3"
                           loading="lazy"
@@ -838,7 +838,7 @@ export default function App() {
                     ) : clan.name === "Uzumaki" ? (
                       <>
                         <img
-                          src="/images/seventh-hokage.webp"
+                          src="/images/uzumaki.webp"
                           alt="Uzumaki"
                           className="w-full h-40 object-cover rounded-lg border border-red-500/20 mb-3"
                           loading="lazy"
@@ -858,7 +858,7 @@ export default function App() {
                     ) : clan.name === "Hyuga" ? (
                       <>
                         <img
-                          src="/images/hinata-hyuga.avif"
+                          src="/images/hyuga.webp"
                           alt="Hyuga"
                           className="w-full h-40 object-cover rounded-lg border border-red-500/20 mb-3"
                           loading="lazy"
@@ -906,7 +906,7 @@ export default function App() {
             {[
               {
                 name: "Uchiha",
-                image: "/images/mighty-guy_vs_madara.webp",
+                image: "/images/uchiha-clan-symbol.png",
                 highlights: [
                   "Sharingan → Mangekyō",
                   "Susanoo",
@@ -928,7 +928,7 @@ export default function App() {
               },
               {
                 name: "Uzumaki",
-                image: "/images/seventh-hokage.webp",
+                image: "/images/uzumaki-clan-symbol.avif",
                 highlights: [
                   "Sealing jutsu mastery",
                   "Huge chakra reserves",
@@ -939,7 +939,7 @@ export default function App() {
               },
               {
                 name: "Hyuga",
-                image: "/images/hinata-hyuga.avif",
+                image: "/images/hyuga-clan-symbol.jpeg",
                 highlights: ["Byakugan", "Gentle Fist", "Chakra point precision"],
                 description:
                   "Masters of precision. Their Byakugan and Gentle Fist style turns chakra control into a surgical weapon in close combat.",
@@ -993,7 +993,7 @@ export default function App() {
             <div className="border border-red-500/30 rounded-2xl overflow-hidden bg-black/70">
               <div className="h-56 overflow-hidden">
                 <img
-                  src="/images/naruto-madara-ninja-war.jpg"
+                  src="/images/battle-against-kaguya.jpg"
                   alt="Kaguya battle aftermath"
                   className="w-full h-full object-cover opacity-80"
                   loading="lazy"
@@ -1019,7 +1019,7 @@ export default function App() {
             <div className="border border-orange-500/30 rounded-2xl overflow-hidden bg-black/70">
               <div className="h-56 overflow-hidden">
                 <img
-                  src="/images/team-7-reunite.jpg"
+                  src="/images/naruto-sasuke-final-battle.jpg"
                   alt="Naruto vs Sasuke finale after victory"
                   className="w-full h-full object-cover opacity-80"
                   loading="lazy"

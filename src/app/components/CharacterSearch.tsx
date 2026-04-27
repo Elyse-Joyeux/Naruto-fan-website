@@ -33,19 +33,18 @@ export function CharacterSearch() {
   const filteredCharacters = useMemo(() => {
     if (query.length === 0) return [];
 
-    const exactMatches = completeCharacterDatabase.filter(
-      (character) => character.name.toLowerCase() === query,
-    );
-    if (exactMatches.length > 0) return exactMatches;
-
-    return completeCharacterDatabase.filter((character) => {
-      const matchesSearch = character.name.toLowerCase().includes(query);
-      const matchesAura =
-        selectedAura === "All" || character.aura === selectedAura;
-      const matchesVillage =
-        selectedVillage === "All" || character.village === selectedVillage;
-      return matchesSearch && matchesAura && matchesVillage;
-    });
+    return completeCharacterDatabase
+      .filter((character) => {
+        const matchesSearch =
+          character.name.toLowerCase().includes(query) ||
+          character.title.toLowerCase().includes(query);
+        const matchesAura =
+          selectedAura === "All" || character.aura === selectedAura;
+        const matchesVillage =
+          selectedVillage === "All" || character.village === selectedVillage;
+        return matchesSearch && matchesAura && matchesVillage;
+      })
+      .filter((character, index, self) => self.findIndex(c => c.name === character.name) === index);
   }, [query, selectedAura, selectedVillage]);
 
   const characterImage = (name: string) => {
