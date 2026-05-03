@@ -156,7 +156,7 @@ interface ImportMeta {
 
 ## 🎉 Result
 
-Your Naruto fan website now has:
+Naruto fan website now has:
 
 - ✨ Professional animations and transitions
 - 🎨 Beautiful color schemes and gradients
@@ -169,3 +169,5 @@ Your Naruto fan website now has:
 ---
 
 **Made with ❤️ - The Will of Fire Burns On! 🔥**
+
+**Authors:** Elyse Joyeux, Nganji Heavens
