@@ -27,35 +27,38 @@ export function Navigation() {
         backgroundAttachment: "fixed",
       }}
     >
-      <div className="absolute inset-0 bg-black/70 backdrop-blur-md" />
+      <div className="absolute inset-0 bg-gradient-to-r from-black/85 via-black/80 to-black/85 backdrop-blur-md" />
       <div className="max-w-7xl mx-auto px-4 relative z-10">
         <div className="flex items-center justify-between h-16">
-          {/* Logo */}
-          <div className="flex items-center gap-2">
-            <Flame className="w-8 h-8 text-orange-500" />
-            <span className="text-2xl bg-gradient-to-r from-orange-500 via-yellow-500 to-orange-500 bg-clip-text text-transparent">
+          {/* Logo with enhanced styling */}
+          <div className="flex items-center gap-3 group cursor-pointer">
+            <div className="relative">
+              <Flame className="w-8 h-8 text-orange-500 group-hover:text-orange-400 transition-colors duration-300 animate-pulse" />
+              <div className="absolute inset-0 bg-orange-500/20 rounded-full blur-md group-hover:blur-lg transition-all duration-300"></div>
+            </div>
+            <span className="text-2xl font-bold bg-gradient-to-r from-orange-500 via-yellow-500 to-orange-500 bg-clip-text text-transparent hover:from-orange-400 hover:via-yellow-400 hover:to-orange-400 transition-all duration-300">
               NARUTO UNIVERSE
             </span>
           </div>
 
-          {/* Desktop Menu */}
-          <div className="hidden md:flex items-center gap-8">
+          {/* Desktop Menu with enhanced hover effects */}
+          <div className="hidden md:flex items-center gap-1">
             {navItems.map((item) => (
               <a
                 key={item.name}
                 href={item.href}
-                className="text-gray-300 hover:text-orange-500 transition-colors duration-300 relative group"
+                className="text-gray-300 hover:text-orange-400 transition-all duration-300 relative group px-3 py-2 rounded-md hover:bg-orange-500/10"
               >
-                {item.name}
-                <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-orange-500 group-hover:w-full transition-all duration-300" />
+                <span className="relative z-10">{item.name}</span>
+                <span className="absolute bottom-1 left-3 right-3 h-0.5 bg-gradient-to-r from-orange-500 to-yellow-500 scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left" />
               </a>
             ))}
           </div>
 
-          {/* Mobile Menu Button */}
+          {/* Mobile Menu Button with animation */}
           <button
             onClick={() => setIsOpen(!isOpen)}
-            className="md:hidden text-orange-500"
+            className="md:hidden text-orange-500 hover:text-orange-400 transition-colors duration-300 p-2 hover:bg-orange-500/10 rounded-md"
             aria-label={
               isOpen ? "Close navigation menu" : "Open navigation menu"
             }
@@ -66,19 +69,24 @@ export function Navigation() {
           </button>
         </div>
 
-        {/* Mobile Menu */}
+        {/* Mobile Menu with smooth animation */}
         {isOpen && (
-          <div className="md:hidden pb-4" id="mobile-nav-menu">
-            {navItems.map((item) => (
-              <a
-                key={item.name}
-                href={item.href}
-                onClick={() => setIsOpen(false)}
-                className="block py-2 text-gray-300 hover:text-orange-500 transition-colors"
-              >
-                {item.name}
-              </a>
-            ))}
+          <div
+            className="md:hidden pb-4 animate-in slide-in-from-top-2 duration-300"
+            id="mobile-nav-menu"
+          >
+            <div className="space-y-1 border-t border-orange-500/20 pt-4">
+              {navItems.map((item) => (
+                <a
+                  key={item.name}
+                  href={item.href}
+                  onClick={() => setIsOpen(false)}
+                  className="block px-4 py-2 text-gray-300 hover:text-orange-400 hover:bg-orange-500/10 transition-all duration-300 rounded-md"
+                >
+                  {item.name}
+                </a>
+              ))}
+            </div>
           </div>
         )}
       </div>

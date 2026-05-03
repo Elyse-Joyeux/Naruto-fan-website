@@ -131,8 +131,7 @@ export default function App() {
         hero.abilities.some((ability) => ability.toLowerCase().includes(query));
       const matchesVillage =
         selectedVillage === "All" || hero.village === selectedVillage;
-      const matchesRank =
-        selectedRank === "All" || hero.rank === selectedRank;
+      const matchesRank = selectedRank === "All" || hero.rank === selectedRank;
       return matchesSearch && matchesVillage && matchesRank;
     });
   }, [heroSearch, selectedVillage, selectedRank]);
@@ -264,7 +263,8 @@ export default function App() {
             <AlertDialogDescription className="text-gray-300">
               Are you genuinely interested in the Naruto universe?
               <br />
-              If so, this page is dedicated to you—crafted to celebrate the Will of Fire, the legendary wars, and the shinobi who shaped history.
+              If so, this page is dedicated to you—crafted to celebrate the Will
+              of Fire, the legendary wars, and the shinobi who shaped history.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
@@ -348,8 +348,7 @@ export default function App() {
           <div
             className="absolute inset-0 opacity-35"
             style={{
-              backgroundImage:
-                "url(/images/naruto-navbar-image.jpg)",
+              backgroundImage: "url(/images/naruto-navbar-image.jpg)",
               backgroundSize: "cover",
               backgroundPosition: "center",
               backgroundAttachment: "fixed",
@@ -380,43 +379,50 @@ export default function App() {
       >
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
-            <div className="flex items-center justify-center gap-4 mb-6">
-              <Zap className="w-12 h-12 text-orange-500" />
+            <div className="flex items-center justify-center gap-4 mb-6 animate-pulse">
+              <Zap className="w-12 h-12 text-orange-500 animate-bounce" />
               <h2 className="text-6xl bg-gradient-to-r from-orange-500 to-yellow-500 bg-clip-text text-transparent">
                 Legendary Heroes
               </h2>
+              <Zap
+                className="w-12 h-12 text-orange-500 animate-bounce"
+                style={{ animationDelay: "0.3s" }}
+              />
             </div>
+            <p className="text-gray-400 max-w-2xl mx-auto">
+              Discover the mightiest shinobi of the Hidden Leaf and beyond
+            </p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            <div className="lg:col-span-3 bg-slate-950/70 border border-orange-500/30 rounded-xl p-4 grid grid-cols-1 md:grid-cols-3 gap-3">
+            <div className="lg:col-span-3 bg-gradient-to-r from-orange-950/40 via-slate-900/50 to-orange-950/40 border-2 border-orange-500/40 hover:border-orange-500/60 rounded-xl p-5 grid grid-cols-1 md:grid-cols-3 gap-3 backdrop-blur-sm transition-all duration-300">
               <input
                 value={heroSearch}
                 onChange={(event) => setHeroSearch(event.target.value)}
-                placeholder="Search hero..."
-                className="bg-black border border-orange-500/30 rounded-md px-3 py-2"
+                placeholder="🔍 Search hero by name, clan, or abilities..."
+                className="bg-black/60 border-2 border-orange-500/30 hover:border-orange-500/60 rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-orange-500 transition-all duration-300"
                 aria-label="Search heroes"
               />
               <select
                 value={selectedVillage}
                 onChange={(event) => setSelectedVillage(event.target.value)}
-                className="bg-black border border-orange-500/30 rounded-md px-3 py-2"
+                className="bg-black/60 border-2 border-orange-500/30 hover:border-orange-500/60 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-orange-500 transition-all duration-300 cursor-pointer"
                 aria-label="Filter heroes by village"
               >
                 {villageOptions.map((option) => (
                   <option key={option} value={option}>
-                    {option}
+                    🏘️ {option}
                   </option>
                 ))}
               </select>
               <select
                 value={selectedRank}
                 onChange={(event) => setSelectedRank(event.target.value)}
-                className="bg-black border border-orange-500/30 rounded-md px-3 py-2"
+                className="bg-black/60 border-2 border-orange-500/30 hover:border-orange-500/60 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-orange-500 transition-all duration-300 cursor-pointer"
                 aria-label="Filter heroes by rank"
               >
                 {rankOptions.map((option) => (
                   <option key={option} value={option}>
-                    {option}
+                    ⭐ {option}
                   </option>
                 ))}
               </select>
@@ -436,27 +442,37 @@ export default function App() {
 
       <section
         id="hokage"
-        className="py-24 px-4 bg-gradient-to-b from-black via-emerald-950/10 to-black"
+        className="py-24 px-4 bg-gradient-to-b from-black via-emerald-950/10 to-black relative overflow-hidden"
       >
-        <div className="max-w-7xl mx-auto">
+        <div className="absolute inset-0 opacity-10">
+          <div className="absolute top-0 left-0 w-96 h-96 bg-emerald-400 rounded-full blur-3xl"></div>
+          <div className="absolute bottom-0 right-0 w-96 h-96 bg-yellow-400 rounded-full blur-3xl"></div>
+        </div>
+        <div className="max-w-7xl mx-auto relative z-10">
           <div className="text-center mb-16">
-            <h2 className="text-6xl bg-gradient-to-r from-emerald-400 to-yellow-500 bg-clip-text text-transparent">
-              Hokage Archives
+            <h2 className="text-6xl bg-gradient-to-r from-emerald-400 to-yellow-500 bg-clip-text text-transparent font-bold">
+              👑 Hokage Archives 👑
             </h2>
             <p className="text-gray-300 mt-3 max-w-3xl mx-auto">
-              A dedicated page for Hokage only—each with picture, abilities,
-              accomplishments, and power.
+              The legendary leaders of the Hidden Leaf—each with extraordinary
+              power, wisdom, and legacy.
             </p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {hokageHeroes.map((hero) => (
-              <HeroCard
+            {hokageHeroes.map((hero, idx) => (
+              <div
                 key={`hokage-${hero.name}`}
-                {...hero}
-                isFavorite={favorites.includes(hero.name)}
-                onToggleFavorite={() => toggleFavorite(hero.name)}
-                onSelect={() => setActiveHero(hero)}
-              />
+                style={{
+                  animation: `fadeInUp 0.6s ease-out ${idx * 0.1}s backwards`,
+                }}
+              >
+                <HeroCard
+                  {...hero}
+                  isFavorite={favorites.includes(hero.name)}
+                  onToggleFavorite={() => toggleFavorite(hero.name)}
+                  onSelect={() => setActiveHero(hero)}
+                />
+              </div>
             ))}
           </div>
         </div>
@@ -529,12 +545,12 @@ export default function App() {
             <select
               value={videoCategory}
               onChange={(event) => setVideoCategory(event.target.value)}
-              className="w-full bg-black border border-orange-500/30 rounded-md px-3 py-2"
+              className="w-full bg-black/60 border-2 border-orange-500/30 hover:border-orange-500/60 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-orange-500 transition-all duration-300 cursor-pointer"
               aria-label="Filter videos by category"
             >
               {videoCategories.map((option) => (
                 <option key={option} value={option}>
-                  {option}
+                  🎬 {option}
                 </option>
               ))}
             </select>
@@ -577,8 +593,8 @@ export default function App() {
                     Naruto Transformations
                   </h3>
                   <p className="text-gray-300">
-                    Hover (or tap on mobile) to see the full transformation
-                    path with visuals.
+                    Hover (or tap on mobile) to see the full transformation path
+                    with visuals.
                   </p>
                 </div>
               }
@@ -718,7 +734,9 @@ export default function App() {
                       <h3 className="text-xl text-yellow-300 mb-1">
                         {item.arc}
                       </h3>
-                      <p className="text-gray-400 text-sm mb-3">{item.period}</p>
+                      <p className="text-gray-400 text-sm mb-3">
+                        {item.period}
+                      </p>
                       <p className="text-gray-300">{item.highlight}</p>
                     </div>
                   }
@@ -736,7 +754,9 @@ export default function App() {
                             <li>• Land of Waves: first true shinobi mission</li>
                             <li>• Chūnin Exams: rivalries and growth</li>
                             <li>• Konoha Crush: the cost of war</li>
-                            <li>• Valley of the End: Naruto vs Sasuke (Part 1)</li>
+                            <li>
+                              • Valley of the End: Naruto vs Sasuke (Part 1)
+                            </li>
                           </>
                         )}
                         {item.arc === "Shippuden" && (
@@ -824,8 +844,8 @@ export default function App() {
                           loading="lazy"
                         />
                         <p className="text-sm text-gray-300">
-                          The clan of exceptional life-force and
-                          versatility—key founders of Konoha.
+                          The clan of exceptional life-force and versatility—key
+                          founders of Konoha.
                         </p>
                         <ul className="mt-2 space-y-1 text-sm text-gray-300">
                           <li>• Major: Hashirama • Tobirama • Tsunade</li>
@@ -864,8 +884,8 @@ export default function App() {
                           loading="lazy"
                         />
                         <p className="text-sm text-gray-300">
-                          Masters of the Byakugan and Gentle
-                          Fist—precision chakra control in close combat.
+                          Masters of the Byakugan and Gentle Fist—precision
+                          chakra control in close combat.
                         </p>
                         <ul className="mt-2 space-y-1 text-sm text-gray-300">
                           <li>• Major: Hinata • Neji • Hiashi • Hanabi</li>
@@ -940,7 +960,11 @@ export default function App() {
               {
                 name: "Hyuga",
                 image: "/images/hyuga-clan-symbol.jpeg",
-                highlights: ["Byakugan", "Gentle Fist", "Chakra point precision"],
+                highlights: [
+                  "Byakugan",
+                  "Gentle Fist",
+                  "Chakra point precision",
+                ],
                 description:
                   "Masters of precision. Their Byakugan and Gentle Fist style turns chakra control into a surgical weapon in close combat.",
               },

@@ -25,53 +25,69 @@ export function MissionCard({
     S: "from-red-600 to-red-700",
   };
 
+  const rankEmoji = {
+    D: "🟦",
+    C: "🟩",
+    B: "🟦",
+    A: "🟪",
+    S: "🟥",
+  };
+
   return (
-    <div className="bg-gradient-to-br from-slate-900 to-black rounded-xl border-2 border-yellow-500/30 hover:border-yellow-500 transition-all duration-300 p-6 shadow-xl hover:shadow-yellow-500/20">
+    <div className="bg-gradient-to-br from-slate-900 to-black rounded-xl border-2 border-yellow-500/30 hover:border-yellow-500 transition-all duration-500 p-6 shadow-xl hover:shadow-yellow-500/30 group hover:scale-105">
       <div className="flex items-start justify-between mb-4">
-        <h3 className="text-xl text-yellow-400">{name}</h3>
+        <h3 className="text-xl text-yellow-400 font-bold group-hover:text-yellow-300 transition-colors duration-300">
+          {name}
+        </h3>
         <div
-          className={`bg-gradient-to-r ${rankColors[rank]} px-3 py-1 rounded-full text-white shadow-lg`}
+          className={`bg-gradient-to-r ${rankColors[rank]} px-4 py-2 rounded-full text-white shadow-lg font-bold flex items-center gap-2`}
         >
-          Rank {rank}
+          {rankEmoji[rank]} Rank {rank}
         </div>
       </div>
 
       <div className="space-y-4">
-        <div>
-          <p className="text-orange-400 text-sm mb-1">Team</p>
+        <div className="bg-orange-500/10 rounded-lg p-3 border border-orange-500/20">
+          <p className="text-orange-400 text-sm mb-1 font-semibold">👥 Team</p>
           <p className="text-white">{team}</p>
         </div>
 
-        <div>
-          <p className="text-orange-400 text-sm mb-1">Objective</p>
-          <p className="text-gray-300">{objective}</p>
+        <div className="bg-blue-500/10 rounded-lg p-3 border border-blue-500/20">
+          <p className="text-blue-400 text-sm mb-1 font-semibold">
+            🎯 Objective
+          </p>
+          <p className="text-gray-300 leading-relaxed">{objective}</p>
         </div>
 
-        <div className="bg-yellow-500/10 rounded-lg p-3 border border-yellow-500/20">
-          <p className="text-yellow-400 text-sm mb-2">Notable Events</p>
-          <ul className="space-y-1">
+        <div className="bg-yellow-500/10 hover:bg-yellow-500/20 rounded-lg p-4 border border-yellow-500/20 transition-all duration-300">
+          <p className="text-yellow-400 text-sm mb-3 font-bold">
+            ⚡ Notable Events
+          </p>
+          <ul className="space-y-2">
             {notableEvents.map((event, idx) => (
               <li
                 key={idx}
-                className="text-gray-400 text-sm flex items-start gap-2"
+                className="text-gray-400 text-sm flex items-start gap-2 hover:text-gray-300 transition-colors duration-300"
               >
-                <span className="text-yellow-500">→</span>
+                <span className="text-yellow-500 font-bold">→</span>
                 {event}
               </li>
             ))}
           </ul>
         </div>
 
-        <div className="pt-3 border-t border-gray-700">
-          <p className="text-green-400 text-sm mb-1">Outcome</p>
-          <p className="text-gray-300">{outcome}</p>
+        <div className="pt-4 border-t border-gray-700/50">
+          <p className="text-emerald-400 text-sm mb-1 font-semibold">
+            ✓ Outcome
+          </p>
+          <p className="text-gray-300 leading-relaxed">{outcome}</p>
         </div>
 
         <button
           onClick={onSelect}
-          className="w-full py-3 rounded-lg bg-yellow-500/10 hover:bg-yellow-500/20 text-yellow-300 transition-all duration-300"
+          className="w-full py-3 rounded-lg bg-yellow-500/10 hover:bg-yellow-500/20 text-yellow-300 transition-all duration-300 font-semibold border border-yellow-500/20 hover:border-yellow-500"
         >
-          Open Mission Details
+          📋 Open Mission Details
         </button>
       </div>
     </div>
